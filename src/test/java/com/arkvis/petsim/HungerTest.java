@@ -98,10 +98,9 @@ class HungerTest {
     }
 
     @Test
-    public void should_returnIncreasedHunger_when_MultipleTimeDurationsHavePassed() {
+    public void should_returnIncreasedHunger_when_multipleTimeDurationsHavePassed() {
         int incrementAmount = 1;
-
-        Hunger hunger = createHunger(0);
+        Hunger hunger = createHunger(0, incrementAmount);
         Pet pet = new Pet("TEST_NAME", hunger);
 
         int numberOfIncrements = 2;
@@ -111,12 +110,30 @@ class HungerTest {
         assertEquals(expectedAmount, pet.getHunger());
     }
 
-    private Hunger createHunger(int minValue) {
+    @Test
+    public void should_returnIncreasedHunger_when_timeIsProgressedMultipleTimes() {
+        int incrementAmount = 1;
+        Hunger hunger = createHunger(0, incrementAmount);
+        Pet pet = new Pet("TEST_NAME", hunger);
+
+        pet.progressTime(Duration.of(1, ChronoUnit.MINUTES));
+        pet.progressTime(Duration.of(1, ChronoUnit.MINUTES));
+
+        int numberOfIncrements = 2;
+        int expectedAmount = incrementAmount * numberOfIncrements;
+        assertEquals(expectedAmount, pet.getHunger());
+    }
+
+    private Hunger createHunger(int minValue, int incrementAmount) {
         return new Hunger.Builder()
                 .minValue(minValue)
                 .maxValue(100)
                 .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
-                .incrementAmount(1)
+                .incrementAmount(incrementAmount)
                 .build();
+    }
+
+    private Hunger createHunger(int minValue) {
+        return createHunger(minValue, 1);
     }
 }
