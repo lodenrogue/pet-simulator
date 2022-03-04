@@ -1,6 +1,5 @@
 package com.arkvis.petsim;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -11,55 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class HungerTest {
 
     @Test
-    void should_throwException_when_buildingHungerButMissingMinValue() {
-        Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> new Hunger.Builder()
-                        .maxValue(100)
-                        .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
-                        .incrementAmount(1)
-                        .build());
-    }
-
-    @Test
-    void should_throwException_when_buildingHungerButMissingMaxValue() {
-        Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> new Hunger.Builder()
-                        .minValue(0)
-                        .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
-                        .incrementAmount(1)
-                        .build());
-    }
-
-    @Test
-    void should_throwException_when_buildingHungerButMissingTimeToIncrement() {
-        Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> new Hunger.Builder()
-                        .minValue(0)
-                        .maxValue(100)
-                        .incrementAmount(1)
-                        .build());
-    }
-
-    @Test
-    void should_throwException_when_buildingHungerButMissingIncrementAmount() {
-        Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> new Hunger.Builder()
-                        .minValue(0)
-                        .maxValue(100)
-                        .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
-                        .build());
-    }
-
-    @Test
     public void should_returnCorrectStartingHunger_when_creatingPet() {
         int minValue = 0;
-        Hunger hunger = createHunger(minValue);
+        Attribute hunger = createHunger(minValue);
 
-        Pet pet = new Pet("TEST_NAME", hunger);
+        Pet pet = new Pet("TEST_NAME", hunger, new StubAttribute());
         assertEquals(minValue, pet.getHunger());
     }
 
@@ -68,31 +23,14 @@ class HungerTest {
         int incrementAmount = 1;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
-        Hunger hunger = new Hunger.Builder()
+        Attribute hunger = new IncreasingAttribute.Builder()
                 .minValue(0)
                 .maxValue(100)
                 .timeToIncrement(time)
                 .incrementAmount(1)
                 .build();
 
-        Pet pet = new Pet("TEST_NAME", hunger);
-        pet.progressTime(time);
-        assertEquals(incrementAmount, pet.getHunger());
-    }
-
-    @Test
-    public void should_returnIncreasedHunger_when_oneTimeUnitHasPassed() {
-        int incrementAmount = 1;
-        Duration time = Duration.of(1, ChronoUnit.MINUTES);
-
-        Hunger hunger = new Hunger.Builder()
-                .minValue(0)
-                .maxValue(100)
-                .timeToIncrement(time)
-                .incrementAmount(1)
-                .build();
-
-        Pet pet = new Pet("TEST_NAME", hunger);
+        Pet pet = new Pet("TEST_NAME", hunger, new StubAttribute());
         pet.progressTime(time);
         assertEquals(incrementAmount, pet.getHunger());
     }
@@ -100,8 +38,8 @@ class HungerTest {
     @Test
     public void should_returnIncreasedHunger_when_multipleTimeDurationsHavePassed() {
         int incrementAmount = 1;
-        Hunger hunger = createHunger(0, incrementAmount);
-        Pet pet = new Pet("TEST_NAME", hunger);
+        Attribute hunger = createHunger(0, incrementAmount);
+        Pet pet = new Pet("TEST_NAME", hunger, new StubAttribute());
 
         int numberOfIncrements = 2;
         pet.progressTime(Duration.of(numberOfIncrements, ChronoUnit.MINUTES));
@@ -113,8 +51,8 @@ class HungerTest {
     @Test
     public void should_returnIncreasedHunger_when_timeIsProgressedMultipleTimes() {
         int incrementAmount = 1;
-        Hunger hunger = createHunger(0, incrementAmount);
-        Pet pet = new Pet("TEST_NAME", hunger);
+        Attribute hunger = createHunger(0, incrementAmount);
+        Pet pet = new Pet("TEST_NAME", hunger, new StubAttribute());
 
         pet.progressTime(Duration.of(1, ChronoUnit.MINUTES));
         pet.progressTime(Duration.of(1, ChronoUnit.MINUTES));
@@ -127,20 +65,20 @@ class HungerTest {
     @Test
     void should_returnMaxHunger_when_tooMuchTimeHasPassed() {
         int maxValue = 100;
-        Hunger hunger = new Hunger.Builder()
+        Attribute hunger = new IncreasingAttribute.Builder()
                 .minValue(0)
                 .maxValue(maxValue)
                 .timeToIncrement(Duration.of(1, ChronoUnit.SECONDS))
                 .incrementAmount(1)
                 .build();
 
-        Pet pet = new Pet("TEST_NAME", hunger);
+        Pet pet = new Pet("TEST_NAME", hunger, new StubAttribute());
         pet.progressTime(Duration.of(10_000, ChronoUnit.SECONDS));
         assertEquals(maxValue, pet.getHunger());
     }
 
-    private Hunger createHunger(int minValue, int incrementAmount) {
-        return new Hunger.Builder()
+    private Attribute createHunger(int minValue, int incrementAmount) {
+        return new IncreasingAttribute.Builder()
                 .minValue(minValue)
                 .maxValue(100)
                 .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
@@ -148,7 +86,7 @@ class HungerTest {
                 .build();
     }
 
-    private Hunger createHunger(int minValue) {
+    private Attribute createHunger(int minValue) {
         return createHunger(minValue, 1);
     }
 }
