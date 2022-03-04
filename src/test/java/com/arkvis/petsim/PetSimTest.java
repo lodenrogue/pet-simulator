@@ -12,7 +12,13 @@ class PetSimTest {
     @Test
     void should_returnCorrectPetName_when_gettingName() {
         String name = "TEST_NAME";
-        Pet pet = new Pet(name, new StubAttribute(), new StubAttribute(), new StubAttribute());
+        Pet pet = new Pet(
+                name,
+                new StubAttribute(),
+                new StubAttribute(),
+                new StubAttribute(),
+                new StubAttribute());
+
         assertEquals(name, pet.getName());
     }
 
@@ -26,7 +32,13 @@ class PetSimTest {
                 .increaseAmount(1)
                 .build();
 
-        Pet pet = new Pet("TEST_NAME", hunger, new StubAttribute(), new StubAttribute());
+        Pet pet = new Pet(
+                "TEST_NAME",
+                hunger,
+                new StubAttribute(),
+                new StubAttribute(),
+                new StubAttribute());
+
         assertEquals(minValue, pet.getHunger());
     }
 
@@ -40,7 +52,13 @@ class PetSimTest {
                 .decreaseAmount(1)
                 .build();
 
-        Pet pet = new Pet("TEST_NAME", new StubAttribute(), happiness, new StubAttribute());
+        Pet pet = new Pet(
+                "TEST_NAME",
+                new StubAttribute(),
+                happiness,
+                new StubAttribute(),
+                new StubAttribute());
+
         assertEquals(maxValue, pet.getHappiness());
     }
 
@@ -54,8 +72,34 @@ class PetSimTest {
                 .decreaseAmount(1)
                 .build();
 
-        Pet pet = new Pet("TEST_NAME", new StubAttribute(), new StubAttribute(), hygiene);
+        Pet pet = new Pet(
+                "TEST_NAME",
+                new StubAttribute(),
+                new StubAttribute(),
+                hygiene,
+                new StubAttribute());
+
         assertEquals(maxValue, pet.getHygiene());
+    }
+
+    @Test
+    void should_returnCorrectStartingBladder_when_creatingPet() {
+        int minValue = 0;
+        Attribute bladder = new IncreasingAttribute.Builder()
+                .minValue(minValue)
+                .maxValue(100)
+                .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
+                .increaseAmount(1)
+                .build();
+
+        Pet pet = new Pet(
+                "TEST_NAME",
+                new StubAttribute(),
+                new StubAttribute(),
+                new StubAttribute(),
+                bladder);
+
+        assertEquals(minValue, pet.getBladder());
     }
 
     @Test
@@ -65,32 +109,23 @@ class PetSimTest {
         int changeAmount = 1;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
-        Attribute hunger = new IncreasingAttribute.Builder()
-                .minValue(minValue)
-                .maxValue(maxValue)
-                .timeToIncrease(time)
-                .increaseAmount(changeAmount)
-                .build();
+        Attribute hunger = new DefaultIncreasingAttribute(time);
+        Attribute happiness = new DefaultDecreasingAttribute(time);
+        Attribute hygiene = new DefaultDecreasingAttribute(time);
+        Attribute bladder = new DefaultIncreasingAttribute(time);
 
-        Attribute happiness = new DecreasingAttribute.Builder()
-                .minValue(minValue)
-                .maxValue(maxValue)
-                .timeToDecrease(time)
-                .decreaseAmount(changeAmount)
-                .build();
+        Pet pet = new Pet(
+                "TEST_NAME",
+                hunger,
+                happiness,
+                hygiene,
+                bladder);
 
-        Attribute hygiene = new DecreasingAttribute.Builder()
-                .minValue(minValue)
-                .maxValue(maxValue)
-                .timeToDecrease(time)
-                .decreaseAmount(changeAmount)
-                .build();
-
-        Pet pet = new Pet("TEST_NAME", hunger, happiness, hygiene);
         pet.progressTime(time);
 
         assertEquals(minValue + changeAmount, pet.getHunger());
         assertEquals(maxValue - changeAmount, pet.getHappiness());
         assertEquals(maxValue - changeAmount, pet.getHygiene());
+        assertEquals(minValue + changeAmount, pet.getBladder());
     }
 }

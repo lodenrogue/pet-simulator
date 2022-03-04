@@ -7,12 +7,14 @@ public class Pet {
     private final Attribute hunger;
     private final Attribute happiness;
     private final Attribute hygiene;
+    private final Attribute bladder;
 
-    public Pet(String name, Attribute hunger, Attribute happiness, Attribute hygiene) {
+    public Pet(String name, Attribute hunger, Attribute happiness, Attribute hygiene, Attribute bladder) {
         this.name = name;
         this.hunger = hunger;
         this.happiness = happiness;
         this.hygiene = hygiene;
+        this.bladder = bladder;
     }
 
     public String getName() {
@@ -27,6 +29,7 @@ public class Pet {
         hunger.progressTime(time);
         happiness.progressTime(time);
         hygiene.progressTime(time);
+        bladder.progressTime(time);
     }
 
     public long getHappiness() {
@@ -35,5 +38,9 @@ public class Pet {
 
     public long getHygiene() {
         return hygiene.getValue();
+    }
+
+    public long getBladder() {
+        return bladder.getValue();
     }
 }
