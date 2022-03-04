@@ -67,4 +67,24 @@ class HappinessTest {
         int expectedAmount = maxValue - (decreaseAmount * numberOfDecrements);
         assertEquals(expectedAmount, pet.getHappiness());
     }
+
+    @Test
+    public void should_returnDecreasedHappiness_when_timeIsProgressedMultipleTimes() {
+        int decreaseAmount = 1;
+        int maxValue = 100;
+        Attribute happiness = new DecreasingAttribute.Builder()
+                .minValue(0)
+                .maxValue(maxValue)
+                .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
+                .decreaseAmount(decreaseAmount)
+                .build();
+
+        Pet pet = new Pet("TEST_NAME", new StubAttribute(), happiness);
+        pet.progressTime(Duration.of(1, ChronoUnit.MINUTES));
+        pet.progressTime(Duration.of(1, ChronoUnit.MINUTES));
+
+        int numberOfDecrements = 2;
+        int expectedAmount = maxValue - (decreaseAmount * numberOfDecrements);
+        assertEquals(expectedAmount, pet.getHappiness());
+    }
 }
