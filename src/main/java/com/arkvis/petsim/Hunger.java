@@ -1,5 +1,7 @@
 package com.arkvis.petsim;
 
+import java.util.Objects;
+
 public class Hunger {
 
     private final Integer minValue;
@@ -54,6 +56,10 @@ public class Hunger {
         }
 
         public Hunger build() {
+            if (Objects.isNull(minValue)) throw new IllegalArgumentException("Min value is required");
+            if (Objects.isNull(maxValue)) throw new IllegalArgumentException("Max value is required");
+            if (Objects.isNull(timeToIncrement)) throw new IllegalArgumentException("Time to increment is required");
+            if (Objects.isNull(incrementAmount)) throw new IllegalArgumentException("Increment amount is required");
             return new Hunger(minValue, maxValue, timeToIncrement, incrementAmount);
         }
     }
