@@ -13,7 +13,7 @@ public class Pet {
         return name;
     }
 
-    public int getHunger() {
+    public long getHunger() {
         return hunger.getValue();
     }
 

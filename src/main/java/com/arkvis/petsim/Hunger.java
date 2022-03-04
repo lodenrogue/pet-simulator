@@ -1,29 +1,50 @@
 package com.arkvis.petsim;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class Hunger {
 
     private final Integer maxValue;
     private final Time timeToIncrement;
     private final Integer incrementAmount;
-    private int value;
+
+    private Time timeSinceIncrement;
+    private long value;
 
     Hunger(int minAmount, int maxAmount, Time timeToIncrement, int incrementAmount) {
         this.maxValue = maxAmount;
         this.timeToIncrement = timeToIncrement;
         this.incrementAmount = incrementAmount;
+
+        timeSinceIncrement = new Time(0, TimeUnit.MINUTES);
         this.value = minAmount;
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
-    public void progressTime(Time time) {
-        if (time.toSeconds() >= timeToIncrement.toSeconds()) {
-            value += Math.min(maxValue, value + incrementAmount);
+    public void progressTime(Time timePassed) {
+        timeSinceIncrement = timeSinceIncrement.plus(timePassed);
+
+        if (timeSinceIncrement.isGreaterOrEqualTo(timeToIncrement)) {
+            long numOfIncrements = timeSinceIncrement.dividedBy(timeToIncrement);
+            value = calculateNewValue(numOfIncrements);
+
+            Time totalIncrementTime = getTotalIncrementTime(numOfIncrements);
+            timeSinceIncrement = timeSinceIncrement.minus(totalIncrementTime);
         }
+    }
+
+    private Time getTotalIncrementTime(long numOfIncrements) {
+        long totalIncrementInSeconds = timeToIncrement.toSeconds() * numOfIncrements;
+        return new Time(totalIncrementInSeconds, TimeUnit.SECONDS);
+    }
+
+    private long calculateNewValue(long numOfIncrements) {
+        long incrementedValue = value + (numOfIncrements * incrementAmount);
+        return Math.min(maxValue, incrementedValue);
     }
 
     public static class Builder {

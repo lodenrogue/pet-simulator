@@ -70,13 +70,34 @@ class HungerTest {
         Hunger hunger = new Hunger.Builder()
                 .minValue(0)
                 .maxValue(100)
-                .timeToIncrement(new Time(1, TimeUnit.SECONDS))
+                .timeToIncrement(time)
                 .incrementAmount(1)
                 .build();
 
         Pet pet = new Pet("TEST_NAME", hunger);
         pet.progressTime(time);
         assertEquals(incrementAmount, pet.getHunger());
+    }
+
+    @Test
+    public void should_returnIncreasedHunger_when_MultipleTimeUnitsHavePassed() {
+        int incrementAmount = 1;
+
+        Hunger hunger = new Hunger.Builder()
+                .minValue(0)
+                .maxValue(100)
+                .timeToIncrement(new Time(1, TimeUnit.MINUTES))
+                .incrementAmount(1)
+                .build();
+
+        Pet pet = new Pet("TEST_NAME", hunger);
+
+        int numOfTimesUnits = 2;
+        Time progressedTime = new Time(numOfTimesUnits, TimeUnit.MINUTES);
+        pet.progressTime(progressedTime);
+
+        int expectedAmount = incrementAmount * numOfTimesUnits;
+        assertEquals(expectedAmount, pet.getHunger());
     }
 
     private Hunger createHunger(int minValue) {
