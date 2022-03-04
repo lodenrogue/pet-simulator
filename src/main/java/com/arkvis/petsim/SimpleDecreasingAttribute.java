@@ -2,10 +2,10 @@ package com.arkvis.petsim;
 
 import java.time.Duration;
 
-public class DefaultDecreasingAttribute extends Attribute {
+public class SimpleDecreasingAttribute extends Attribute {
     private final Attribute attribute;
 
-    public DefaultDecreasingAttribute(Duration timeToDecrease) {
+    public SimpleDecreasingAttribute(Duration timeToDecrease) {
         attribute = new DecreasingAttribute.Builder()
                 .minValue(0)
                 .maxValue(100)
