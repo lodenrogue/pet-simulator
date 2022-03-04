@@ -12,12 +12,12 @@ class PetSimTest {
     @Test
     void should_returnCorrectPetName_when_gettingName() {
         String name = "TEST_NAME";
-        Pet pet = new Pet(name, new StubAttribute(), new StubAttribute());
+        Pet pet = new Pet(name, new StubAttribute(), new StubAttribute(), new StubAttribute());
         assertEquals(name, pet.getName());
     }
 
     @Test
-    public void should_returnCorrectStartingHunger_when_creatingPet() {
+    void should_returnCorrectStartingHunger_when_creatingPet() {
         int minValue = 0;
         Attribute hunger = new IncreasingAttribute.Builder()
                 .minValue(minValue)
@@ -26,12 +26,12 @@ class PetSimTest {
                 .increaseAmount(1)
                 .build();
 
-        Pet pet = new Pet("TEST_NAME", hunger, new StubAttribute());
+        Pet pet = new Pet("TEST_NAME", hunger, new StubAttribute(), new StubAttribute());
         assertEquals(minValue, pet.getHunger());
     }
 
     @Test
-    public void should_returnCorrectStartingHappiness_when_creatingPet() {
+    void should_returnCorrectStartingHappiness_when_creatingPet() {
         int maxValue = 100;
         Attribute happiness = new DecreasingAttribute.Builder()
                 .minValue(0)
@@ -40,8 +40,57 @@ class PetSimTest {
                 .decreaseAmount(1)
                 .build();
 
-        Pet pet = new Pet("TEST_NAME", new StubAttribute(), happiness);
+        Pet pet = new Pet("TEST_NAME", new StubAttribute(), happiness, new StubAttribute());
         assertEquals(maxValue, pet.getHappiness());
     }
 
+    @Test
+    void should_returnCorrectStartingHygiene_when_creatingPet() {
+        int maxValue = 100;
+        Attribute hygiene = new DecreasingAttribute.Builder()
+                .minValue(0)
+                .maxValue(maxValue)
+                .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
+                .decreaseAmount(1)
+                .build();
+
+        Pet pet = new Pet("TEST_NAME", new StubAttribute(), new StubAttribute(), hygiene);
+        assertEquals(maxValue, pet.getHygiene());
+    }
+
+    @Test
+    void should_returnCorrectValues_when_progressingTime() {
+        int minValue = 0;
+        int maxValue = 100;
+        int changeAmount = 1;
+        Duration time = Duration.of(1, ChronoUnit.MINUTES);
+
+        Attribute hunger = new IncreasingAttribute.Builder()
+                .minValue(minValue)
+                .maxValue(maxValue)
+                .timeToIncrease(time)
+                .increaseAmount(changeAmount)
+                .build();
+
+        Attribute happiness = new DecreasingAttribute.Builder()
+                .minValue(minValue)
+                .maxValue(maxValue)
+                .timeToDecrease(time)
+                .decreaseAmount(changeAmount)
+                .build();
+
+        Attribute hygiene = new DecreasingAttribute.Builder()
+                .minValue(minValue)
+                .maxValue(maxValue)
+                .timeToDecrease(time)
+                .decreaseAmount(changeAmount)
+                .build();
+
+        Pet pet = new Pet("TEST_NAME", hunger, happiness, hygiene);
+        pet.progressTime(time);
+
+        assertEquals(minValue + changeAmount, pet.getHunger());
+        assertEquals(maxValue - changeAmount, pet.getHappiness());
+        assertEquals(maxValue - changeAmount, pet.getHygiene());
+    }
 }
