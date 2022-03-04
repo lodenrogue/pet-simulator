@@ -3,7 +3,8 @@ package com.arkvis.petsim;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,7 +16,7 @@ class HungerTest {
                 IllegalArgumentException.class,
                 () -> new Hunger.Builder()
                         .maxValue(100)
-                        .timeToIncrement(new Time(1, TimeUnit.SECONDS))
+                        .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
                         .incrementAmount(1)
                         .build());
     }
@@ -26,7 +27,7 @@ class HungerTest {
                 IllegalArgumentException.class,
                 () -> new Hunger.Builder()
                         .minValue(0)
-                        .timeToIncrement(new Time(1, TimeUnit.SECONDS))
+                        .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
                         .incrementAmount(1)
                         .build());
     }
@@ -49,7 +50,7 @@ class HungerTest {
                 () -> new Hunger.Builder()
                         .minValue(0)
                         .maxValue(100)
-                        .timeToIncrement(new Time(1, TimeUnit.SECONDS))
+                        .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
                         .build());
     }
 
@@ -63,9 +64,9 @@ class HungerTest {
     }
 
     @Test
-    public void should_returnIncreasedHunger_when_oneTimeUnitHasPassed() {
+    public void should_returnIncreasedHunger_when_oneDurationHasPassed() {
         int incrementAmount = 1;
-        Time time = new Time(1, TimeUnit.MINUTES);
+        Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
         Hunger hunger = new Hunger.Builder()
                 .minValue(0)
@@ -80,21 +81,31 @@ class HungerTest {
     }
 
     @Test
-    public void should_returnIncreasedHunger_when_MultipleTimeUnitsHavePassed() {
+    public void should_returnIncreasedHunger_when_oneTimeUnitHasPassed() {
         int incrementAmount = 1;
+        Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
         Hunger hunger = new Hunger.Builder()
                 .minValue(0)
                 .maxValue(100)
-                .timeToIncrement(new Time(1, TimeUnit.MINUTES))
-                .incrementAmount(incrementAmount)
+                .timeToIncrement(time)
+                .incrementAmount(1)
                 .build();
 
         Pet pet = new Pet("TEST_NAME", hunger);
+        pet.progressTime(time);
+        assertEquals(incrementAmount, pet.getHunger());
+    }
+
+    @Test
+    public void should_returnIncreasedHunger_when_MultipleTimeDurationsHavePassed() {
+        int incrementAmount = 1;
+
+        Hunger hunger = createHunger(0);
+        Pet pet = new Pet("TEST_NAME", hunger);
 
         int numberOfIncrements = 2;
-        Time progressedTime = new Time(numberOfIncrements, TimeUnit.MINUTES);
-        pet.progressTime(progressedTime);
+        pet.progressTime(Duration.of(numberOfIncrements, ChronoUnit.MINUTES));
 
         int expectedAmount = incrementAmount * numberOfIncrements;
         assertEquals(expectedAmount, pet.getHunger());
@@ -104,7 +115,7 @@ class HungerTest {
         return new Hunger.Builder()
                 .minValue(minValue)
                 .maxValue(100)
-                .timeToIncrement(new Time(1, TimeUnit.SECONDS))
+                .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
                 .incrementAmount(1)
                 .build();
     }

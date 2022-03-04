@@ -1,5 +1,7 @@
 package com.arkvis.petsim;
 
+import java.time.Duration;
+
 public class Pet {
     private final String name;
     private final Hunger hunger;
@@ -17,7 +19,7 @@ public class Pet {
         return hunger.getValue();
     }
 
-    public void progressTime(Time time) {
+    public void progressTime(Duration time) {
         hunger.progressTime(time);
     }
 }

@@ -1,23 +1,24 @@
 package com.arkvis.petsim;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class Hunger {
 
     private final Integer maxValue;
-    private final Time timeToIncrement;
+    private final Duration timeToIncrement;
     private final Integer incrementAmount;
 
-    private Time timeSinceIncrement;
+    private Duration timeSinceIncrement;
     private long value;
 
-    Hunger(int minAmount, int maxAmount, Time timeToIncrement, int incrementAmount) {
+    Hunger(int minAmount, int maxAmount, Duration timeToIncrement, int incrementAmount) {
         this.maxValue = maxAmount;
         this.timeToIncrement = timeToIncrement;
         this.incrementAmount = incrementAmount;
 
-        timeSinceIncrement = new Time(0, TimeUnit.MINUTES);
+        timeSinceIncrement = Duration.of(0, ChronoUnit.MINUTES);
         this.value = minAmount;
     }
 
@@ -25,21 +26,21 @@ public class Hunger {
         return value;
     }
 
-    public void progressTime(Time timePassed) {
+    public void progressTime(Duration timePassed) {
         timeSinceIncrement = timeSinceIncrement.plus(timePassed);
 
-        if (timeSinceIncrement.isGreaterOrEqualTo(timeToIncrement)) {
+        if (timeSinceIncrement.compareTo(timeToIncrement) >= 0) {
             long numOfIncrements = timeSinceIncrement.dividedBy(timeToIncrement);
             value = calculateNewValue(numOfIncrements);
 
-            Time totalIncrementTime = getTotalIncrementTime(numOfIncrements);
+            Duration totalIncrementTime = getTotalIncrementTime(numOfIncrements);
             timeSinceIncrement = timeSinceIncrement.minus(totalIncrementTime);
         }
     }
 
-    private Time getTotalIncrementTime(long numOfIncrements) {
-        long totalIncrementInSeconds = timeToIncrement.toSeconds() * numOfIncrements;
-        return new Time(totalIncrementInSeconds, TimeUnit.SECONDS);
+    private Duration getTotalIncrementTime(long numOfIncrements) {
+        long totalIncrementInSeconds = timeToIncrement.getSeconds() * numOfIncrements;
+        return Duration.of(totalIncrementInSeconds, ChronoUnit.SECONDS);
     }
 
     private long calculateNewValue(long numOfIncrements) {
@@ -50,7 +51,7 @@ public class Hunger {
     public static class Builder {
         private Integer minValue;
         private Integer maxValue;
-        private Time timeToIncrement;
+        private Duration timeToIncrement;
         private Integer incrementAmount;
 
 
@@ -64,7 +65,7 @@ public class Hunger {
             return this;
         }
 
-        public Builder timeToIncrement(Time time) {
+        public Builder timeToIncrement(Duration time) {
             this.timeToIncrement = time;
             return this;
         }

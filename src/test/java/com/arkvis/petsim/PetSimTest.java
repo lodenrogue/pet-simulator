@@ -3,7 +3,8 @@ package com.arkvis.petsim;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,7 +28,7 @@ class PetSimTest {
         return new Hunger.Builder()
                 .minValue(0)
                 .maxValue(100)
-                .timeToIncrement(new Time(1, TimeUnit.SECONDS))
+                .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
                 .incrementAmount(1)
                 .build();
     }
