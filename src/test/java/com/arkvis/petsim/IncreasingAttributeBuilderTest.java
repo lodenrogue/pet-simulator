@@ -15,7 +15,7 @@ class IncreasingAttributeBuilderTest {
                 () -> new IncreasingAttribute.Builder()
                         .maxValue(100)
                         .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
-                        .incrementAmount(1)
+                        .increaseAmount(1)
                         .build());
     }
 
@@ -26,7 +26,7 @@ class IncreasingAttributeBuilderTest {
                 () -> new IncreasingAttribute.Builder()
                         .minValue(0)
                         .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
-                        .incrementAmount(1)
+                        .increaseAmount(1)
                         .build());
     }
 
@@ -37,7 +37,7 @@ class IncreasingAttributeBuilderTest {
                 () -> new IncreasingAttribute.Builder()
                         .minValue(0)
                         .maxValue(100)
-                        .incrementAmount(1)
+                        .increaseAmount(1)
                         .build());
     }
 

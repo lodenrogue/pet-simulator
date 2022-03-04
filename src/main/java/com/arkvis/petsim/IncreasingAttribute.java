@@ -71,7 +71,7 @@ public class IncreasingAttribute implements Attribute {
             return this;
         }
 
-        public Builder incrementAmount(int increaseAmount) {
+        public Builder increaseAmount(int increaseAmount) {
             this.increaseAmount = increaseAmount;
             return this;
         }
