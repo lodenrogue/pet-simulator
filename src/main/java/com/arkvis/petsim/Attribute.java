@@ -2,9 +2,9 @@ package com.arkvis.petsim;
 
 import java.time.Duration;
 
-interface Attribute {
+public abstract class Attribute {
 
-    long getValue();
+    abstract long getValue();
 
-    void progressTime(Duration time);
+    abstract void progressTime(Duration time);
 }

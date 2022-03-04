@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class IncreasingAttribute implements Attribute {
+public class IncreasingAttribute extends Attribute {
     private final Integer maxValue;
     private final Duration timeToIncrease;
     private final Integer increaseAmount;
@@ -22,12 +22,12 @@ public class IncreasingAttribute implements Attribute {
     }
 
     @Override
-    public long getValue() {
+    long getValue() {
         return value;
     }
 
     @Override
-    public void progressTime(Duration timePassed) {
+    void progressTime(Duration timePassed) {
         timeSinceIncrease = timeSinceIncrease.plus(timePassed);
 
         if (timeSinceIncrease.compareTo(timeToIncrease) >= 0) {

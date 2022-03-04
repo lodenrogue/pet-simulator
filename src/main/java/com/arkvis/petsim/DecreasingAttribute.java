@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class DecreasingAttribute implements Attribute {
+public class DecreasingAttribute extends Attribute {
 
     private final Duration timeToDecrease;
     private final int decreaseAmount;
@@ -23,12 +23,12 @@ public class DecreasingAttribute implements Attribute {
     }
 
     @Override
-    public long getValue() {
+    long getValue() {
         return value;
     }
 
     @Override
-    public void progressTime(Duration timePassed) {
+    void progressTime(Duration timePassed) {
         timeSinceDecrease = timeSinceDecrease.plus(timePassed);
 
         if (timeSinceDecrease.compareTo(timeToDecrease) >= 0) {

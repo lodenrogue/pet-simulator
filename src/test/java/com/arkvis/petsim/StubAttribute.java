@@ -2,15 +2,15 @@ package com.arkvis.petsim;
 
 import java.time.Duration;
 
-public class StubAttribute implements Attribute {
+public class StubAttribute extends Attribute {
 
     @Override
-    public long getValue() {
+    long getValue() {
         return 0;
     }
 
     @Override
-    public void progressTime(Duration time) {
+    void progressTime(Duration time) {
 
     }
 }
