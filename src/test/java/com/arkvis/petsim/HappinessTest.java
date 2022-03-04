@@ -87,4 +87,19 @@ class HappinessTest {
         int expectedAmount = maxValue - (decreaseAmount * numberOfDecrements);
         assertEquals(expectedAmount, pet.getHappiness());
     }
+
+    @Test
+    void should_returnMinHappiness_when_tooMuchTimeHasPassed() {
+        int minValue = 0;
+        Attribute happiness = new DecreasingAttribute.Builder()
+                .minValue(minValue)
+                .maxValue(100)
+                .timeToDecrease(Duration.of(1, ChronoUnit.SECONDS))
+                .decreaseAmount(1)
+                .build();
+
+        Pet pet = new Pet("TEST_NAME", new StubAttribute(), happiness);
+        pet.progressTime(Duration.of(10_000, ChronoUnit.SECONDS));
+        assertEquals(minValue, pet.getHappiness());
+    }
 }
