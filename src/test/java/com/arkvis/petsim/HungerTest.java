@@ -87,16 +87,16 @@ class HungerTest {
                 .minValue(0)
                 .maxValue(100)
                 .timeToIncrement(new Time(1, TimeUnit.MINUTES))
-                .incrementAmount(1)
+                .incrementAmount(incrementAmount)
                 .build();
 
         Pet pet = new Pet("TEST_NAME", hunger);
 
-        int numOfTimesUnits = 2;
-        Time progressedTime = new Time(numOfTimesUnits, TimeUnit.MINUTES);
+        int numberOfIncrements = 2;
+        Time progressedTime = new Time(numberOfIncrements, TimeUnit.MINUTES);
         pet.progressTime(progressedTime);
 
-        int expectedAmount = incrementAmount * numOfTimesUnits;
+        int expectedAmount = incrementAmount * numberOfIncrements;
         assertEquals(expectedAmount, pet.getHunger());
     }
 
