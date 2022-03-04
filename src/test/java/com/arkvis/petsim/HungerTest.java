@@ -26,7 +26,7 @@ class HungerTest {
         Attribute hunger = new IncreasingAttribute.Builder()
                 .minValue(0)
                 .maxValue(100)
-                .timeToIncrement(time)
+                .timeToIncrease(time)
                 .incrementAmount(1)
                 .build();
 
@@ -68,7 +68,7 @@ class HungerTest {
         Attribute hunger = new IncreasingAttribute.Builder()
                 .minValue(0)
                 .maxValue(maxValue)
-                .timeToIncrement(Duration.of(1, ChronoUnit.SECONDS))
+                .timeToIncrease(Duration.of(1, ChronoUnit.SECONDS))
                 .incrementAmount(1)
                 .build();
 
@@ -81,7 +81,7 @@ class HungerTest {
         return new IncreasingAttribute.Builder()
                 .minValue(minValue)
                 .maxValue(100)
-                .timeToIncrement(Duration.of(1, ChronoUnit.MINUTES))
+                .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
                 .incrementAmount(incrementAmount)
                 .build();
     }

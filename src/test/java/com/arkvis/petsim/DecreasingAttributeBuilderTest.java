@@ -6,16 +6,16 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
-class IncreasingAttributeBuilderTest {
+class DecreasingAttributeBuilderTest {
 
     @Test
     void should_throwException_when_buildingAttributeButMissingMinValue() {
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> new IncreasingAttribute.Builder()
+                () -> new DecreasingAttribute.Builder()
                         .maxValue(100)
-                        .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
-                        .incrementAmount(1)
+                        .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
+                        .decreaseAmount(1)
                         .build());
     }
 
@@ -23,10 +23,10 @@ class IncreasingAttributeBuilderTest {
     void should_throwException_when_buildingAttributeButMissingMaxValue() {
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> new IncreasingAttribute.Builder()
+                () -> new DecreasingAttribute.Builder()
                         .minValue(0)
-                        .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
-                        .incrementAmount(1)
+                        .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
+                        .decreaseAmount(1)
                         .build());
     }
 
@@ -34,21 +34,21 @@ class IncreasingAttributeBuilderTest {
     void should_throwException_when_buildingAttributeButMissingTimeToIncrement() {
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> new IncreasingAttribute.Builder()
+                () -> new DecreasingAttribute.Builder()
                         .minValue(0)
                         .maxValue(100)
-                        .incrementAmount(1)
+                        .decreaseAmount(1)
                         .build());
     }
 
     @Test
-    void should_throwException_when_buildingAttributeButMissingIncrementAmount() {
+    void should_throwException_when_buildingAttributeButMissingdecreaseAmount() {
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> new IncreasingAttribute.Builder()
+                () -> new DecreasingAttribute.Builder()
                         .minValue(0)
                         .maxValue(100)
-                        .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
+                        .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
                         .build());
     }
 }

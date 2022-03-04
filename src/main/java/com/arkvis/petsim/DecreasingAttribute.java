@@ -1,6 +1,7 @@
 package com.arkvis.petsim;
 
 import java.time.Duration;
+import java.util.Objects;
 
 public class DecreasingAttribute implements Attribute {
 
@@ -21,10 +22,10 @@ public class DecreasingAttribute implements Attribute {
     }
 
     public static class Builder {
-        private int minValue;
-        private int maxValue;
+        private Integer minValue;
+        private Integer maxValue;
         private Duration timeToDecrease;
-        private int decreaseAmount;
+        private Integer decreaseAmount;
 
         public Builder minValue(int minValue) {
             this.minValue = minValue;
@@ -47,6 +48,10 @@ public class DecreasingAttribute implements Attribute {
         }
 
         public Attribute build() {
+            if (Objects.isNull(minValue)) throw new IllegalArgumentException("Min value is required");
+            if (Objects.isNull(maxValue)) throw new IllegalArgumentException("Max value is required");
+            if (Objects.isNull(timeToDecrease)) throw new IllegalArgumentException("Time to decrease is required");
+            if (Objects.isNull(decreaseAmount)) throw new IllegalArgumentException("Decrease amount is required");
             return new DecreasingAttribute(minValue, maxValue, timeToDecrease, decreaseAmount);
         }
     }

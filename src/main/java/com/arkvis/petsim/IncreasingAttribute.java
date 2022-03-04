@@ -6,18 +6,18 @@ import java.util.Objects;
 
 public class IncreasingAttribute implements Attribute {
     private final Integer maxValue;
-    private final Duration timeToIncrement;
-    private final Integer incrementAmount;
+    private final Duration timeToIncrease;
+    private final Integer increaseAmount;
 
-    private Duration timeSinceIncrement;
+    private Duration timeSinceIncrease;
     private long value;
 
-    IncreasingAttribute(int minAmount, int maxAmount, Duration timeToIncrement, int incrementAmount) {
+    IncreasingAttribute(int minAmount, int maxAmount, Duration timeToIncrease, int increaseAmount) {
         this.maxValue = maxAmount;
-        this.timeToIncrement = timeToIncrement;
-        this.incrementAmount = incrementAmount;
+        this.timeToIncrease = timeToIncrease;
+        this.increaseAmount = increaseAmount;
 
-        timeSinceIncrement = Duration.of(0, ChronoUnit.MINUTES);
+        timeSinceIncrease = Duration.of(0, ChronoUnit.MINUTES);
         this.value = minAmount;
     }
 
@@ -28,32 +28,32 @@ public class IncreasingAttribute implements Attribute {
 
     @Override
     public void progressTime(Duration timePassed) {
-        timeSinceIncrement = timeSinceIncrement.plus(timePassed);
+        timeSinceIncrease = timeSinceIncrease.plus(timePassed);
 
-        if (timeSinceIncrement.compareTo(timeToIncrement) >= 0) {
-            long numOfIncrements = timeSinceIncrement.dividedBy(timeToIncrement);
+        if (timeSinceIncrease.compareTo(timeToIncrease) >= 0) {
+            long numOfIncrements = timeSinceIncrease.dividedBy(timeToIncrease);
             value = calculateNewValue(numOfIncrements);
 
             Duration totalIncrementTime = getTotalIncrementTime(numOfIncrements);
-            timeSinceIncrement = timeSinceIncrement.minus(totalIncrementTime);
+            timeSinceIncrease = timeSinceIncrease.minus(totalIncrementTime);
         }
     }
 
     private Duration getTotalIncrementTime(long numOfIncrements) {
-        long totalIncrementInSeconds = timeToIncrement.getSeconds() * numOfIncrements;
+        long totalIncrementInSeconds = timeToIncrease.getSeconds() * numOfIncrements;
         return Duration.of(totalIncrementInSeconds, ChronoUnit.SECONDS);
     }
 
     private long calculateNewValue(long numOfIncrements) {
-        long incrementedValue = value + (numOfIncrements * incrementAmount);
+        long incrementedValue = value + (numOfIncrements * increaseAmount);
         return Math.min(maxValue, incrementedValue);
     }
 
     public static class Builder {
         private Integer minValue;
         private Integer maxValue;
-        private Duration timeToIncrement;
-        private Integer incrementAmount;
+        private Duration timeToIncrease;
+        private Integer increaseAmount;
 
 
         public Builder minValue(int minValue) {
@@ -66,22 +66,22 @@ public class IncreasingAttribute implements Attribute {
             return this;
         }
 
-        public Builder timeToIncrement(Duration time) {
-            this.timeToIncrement = time;
+        public Builder timeToIncrease(Duration timeToIncrease) {
+            this.timeToIncrease = timeToIncrease;
             return this;
         }
 
-        public Builder incrementAmount(int amount) {
-            this.incrementAmount = amount;
+        public Builder incrementAmount(int increaseAmount) {
+            this.increaseAmount = increaseAmount;
             return this;
         }
 
         public Attribute build() {
             if (Objects.isNull(minValue)) throw new IllegalArgumentException("Min value is required");
             if (Objects.isNull(maxValue)) throw new IllegalArgumentException("Max value is required");
-            if (Objects.isNull(timeToIncrement)) throw new IllegalArgumentException("Time to increment is required");
-            if (Objects.isNull(incrementAmount)) throw new IllegalArgumentException("Increment amount is required");
-            return new IncreasingAttribute(minValue, maxValue, timeToIncrement, incrementAmount);
+            if (Objects.isNull(timeToIncrease)) throw new IllegalArgumentException("Time to increase is required");
+            if (Objects.isNull(increaseAmount)) throw new IllegalArgumentException("Increase amount is required");
+            return new IncreasingAttribute(minValue, maxValue, timeToIncrease, increaseAmount);
         }
     }
 }
