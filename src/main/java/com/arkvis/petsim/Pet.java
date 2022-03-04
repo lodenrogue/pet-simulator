@@ -1,8 +1,6 @@
 package com.arkvis.petsim;
 
 public class Pet {
-    private static final int MAX_HUNGER = 100;
-
     private final String name;
     private final Hunger hunger;
 

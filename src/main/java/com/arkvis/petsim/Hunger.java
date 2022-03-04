@@ -4,14 +4,12 @@ import java.util.Objects;
 
 public class Hunger {
 
-    private final Integer minValue;
     private final Integer maxValue;
     private final Time timeToIncrement;
     private final Integer incrementAmount;
     private int value;
 
     Hunger(int minAmount, int maxAmount, Time timeToIncrement, int incrementAmount) {
-        this.minValue = minAmount;
         this.maxValue = maxAmount;
         this.timeToIncrement = timeToIncrement;
         this.incrementAmount = incrementAmount;

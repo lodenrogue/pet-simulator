@@ -3,7 +3,6 @@ package com.arkvis.petsim;
 import java.util.concurrent.TimeUnit;
 
 public class Time {
-
     private final int duration;
     private final TimeUnit timeUnit;
 
