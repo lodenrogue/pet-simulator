@@ -23,6 +23,7 @@ public class Pet {
 
     public void progressTime(Duration time) {
         hunger.progressTime(time);
+        happiness.progressTime(time);
     }
 
     public long getHappiness() {

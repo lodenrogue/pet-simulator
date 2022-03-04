@@ -27,4 +27,24 @@ class HappinessTest {
                 happiness);
         assertEquals(maxValue, pet.getHappiness());
     }
+
+    @Test
+    public void should_returnDecreasedHappiness_when_oneDurationHasPassed() {
+        int decreaseAmount = 1;
+        int maxValue = 100;
+        Duration time = Duration.of(1, ChronoUnit.MINUTES);
+
+        Attribute happiness = new DecreasingAttribute.Builder()
+                .minValue(0)
+                .maxValue(maxValue)
+                .timeToDecrease(time)
+                .decreaseAmount(decreaseAmount)
+                .build();
+
+        Pet pet = new Pet("TEST_NAME", new StubAttribute(), happiness);
+        pet.progressTime(time);
+
+        int expectedValue = maxValue - decreaseAmount;
+        assertEquals(expectedValue, pet.getHappiness());
+    }
 }

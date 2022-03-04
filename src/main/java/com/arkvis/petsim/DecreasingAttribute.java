@@ -1,14 +1,25 @@
 package com.arkvis.petsim;
 
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class DecreasingAttribute implements Attribute {
 
-    private final int value;
+    private final Duration timeToDecrease;
+    private final int decreaseAmount;
+    private final int minValue;
+
+    private long value;
+    private Duration timeSinceDecrease;
 
     DecreasingAttribute(int minValue, int maxValue, Duration timeToDecrease, int decreaseAmount) {
-        this.value = maxValue;
+        this.minValue = minValue;
+        this.timeToDecrease = timeToDecrease;
+        this.decreaseAmount = decreaseAmount;
+
+        value = maxValue;
+        timeSinceDecrease = Duration.of(0, ChronoUnit.MINUTES);
     }
 
     @Override
@@ -17,8 +28,26 @@ public class DecreasingAttribute implements Attribute {
     }
 
     @Override
-    public void progressTime(Duration time) {
+    public void progressTime(Duration timePassed) {
+        timeSinceDecrease = timeSinceDecrease.plus(timePassed);
 
+        if (timeSinceDecrease.compareTo(timeToDecrease) >= 0) {
+            long numOfDecrements = timeSinceDecrease.dividedBy(timeToDecrease);
+            value = calculateNewValue(numOfDecrements);
+
+            Duration totalIncrementTime = getTotalIncrementTime(numOfDecrements);
+            timeSinceDecrease = timeSinceDecrease.minus(totalIncrementTime);
+        }
+    }
+
+    private Duration getTotalIncrementTime(long numOfIncrements) {
+        long totalIncrementInSeconds = timeToDecrease.getSeconds() * numOfIncrements;
+        return Duration.of(totalIncrementInSeconds, ChronoUnit.SECONDS);
+    }
+
+    private long calculateNewValue(long numOfDecrements) {
+        long decrementedValue = value - (numOfDecrements * decreaseAmount);
+        return Math.max(minValue, decrementedValue);
     }
 
     public static class Builder {
