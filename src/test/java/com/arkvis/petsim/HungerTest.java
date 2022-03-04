@@ -124,6 +124,21 @@ class HungerTest {
         assertEquals(expectedAmount, pet.getHunger());
     }
 
+    @Test
+    void should_returnMaxHunger_when_tooMuchTimeHasPassed() {
+        int maxValue = 100;
+        Hunger hunger = new Hunger.Builder()
+                .minValue(0)
+                .maxValue(maxValue)
+                .timeToIncrement(Duration.of(1, ChronoUnit.SECONDS))
+                .incrementAmount(1)
+                .build();
+
+        Pet pet = new Pet("TEST_NAME", hunger);
+        pet.progressTime(Duration.of(10_000, ChronoUnit.SECONDS));
+        assertEquals(maxValue, pet.getHunger());
+    }
+
     private Hunger createHunger(int minValue, int incrementAmount) {
         return new Hunger.Builder()
                 .minValue(minValue)
