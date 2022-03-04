@@ -22,11 +22,11 @@ public class Hunger {
         this.value = minAmount;
     }
 
-    public long getValue() {
+    long getValue() {
         return value;
     }
 
-    public void progressTime(Duration timePassed) {
+    void progressTime(Duration timePassed) {
         timeSinceIncrement = timeSinceIncrement.plus(timePassed);
 
         if (timeSinceIncrement.compareTo(timeToIncrement) >= 0) {
