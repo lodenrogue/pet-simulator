@@ -4,6 +4,10 @@ import java.time.Duration;
 
 public class StubAttribute extends Attribute {
 
+    StubAttribute() {
+        super(0, 0, 0, Duration.ZERO, 0);
+    }
+
     @Override
     long getValue() {
         return 0;

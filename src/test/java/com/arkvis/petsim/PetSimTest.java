@@ -24,30 +24,10 @@ class PetSimTest {
     }
 
     @Test
-    void should_returnCorrectStartingHappiness_when_creatingPet() {
-        int maxValue = 100;
-        Attribute happiness = new DecreasingAttribute.Builder()
-                .minValue(0)
-                .maxValue(maxValue)
-                .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
-                .decreaseAmount(1)
-                .build();
-
-        Pet pet = new Pet(
-                "TEST_NAME",
-                new StubAttribute(),
-                happiness,
-                new StubAttribute(),
-                new StubAttribute(),
-                new StubAttribute());
-
-        assertEquals(maxValue, pet.getHappiness());
-    }
-
-    @Test
     void should_returnCorrectStartingHygiene_when_creatingPet() {
         int maxValue = 100;
-        Attribute hygiene = new DecreasingAttribute.Builder()
+        Attribute hygiene = new Attribute.Builder()
+                .startingValue(maxValue)
                 .minValue(0)
                 .maxValue(maxValue)
                 .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
@@ -68,12 +48,12 @@ class PetSimTest {
     @Test
     void should_returnCorrectStartingBladder_when_creatingPet() {
         int minValue = 0;
-        Attribute bladder = new IncreasingAttribute.Builder()
+        Attribute bladder = new Attribute.Builder()
                 .startingValue(minValue)
                 .minValue(minValue)
                 .maxValue(100)
-                .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
-                .increaseAmount(1)
+                .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
+                .decreaseAmount(1)
                 .build();
 
         Pet pet = new Pet(
@@ -90,7 +70,8 @@ class PetSimTest {
     @Test
     void should_returnCorrectStartingEnergy_when_creatingPet() {
         int maxValue = 100;
-        Attribute energy = new DecreasingAttribute.Builder()
+        Attribute energy = new Attribute.Builder()
+                .startingValue(maxValue)
                 .minValue(0)
                 .maxValue(maxValue)
                 .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
@@ -115,11 +96,11 @@ class PetSimTest {
         int changeAmount = 1;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
-        Attribute hunger = new SimpleIncreasingAttribute(time);
-        Attribute happiness = new SimpleDecreasingAttribute(time);
-        Attribute hygiene = new SimpleDecreasingAttribute(time);
-        Attribute bladder = new SimpleIncreasingAttribute(time);
-        Attribute energy = new SimpleDecreasingAttribute(time);
+        Attribute hunger = new SimpleAttribute(time);
+        Attribute happiness = new SimpleAttribute(time);
+        Attribute hygiene = new SimpleAttribute(time);
+        Attribute bladder = new SimpleAttribute(time);
+        Attribute energy = new SimpleAttribute(time);
 
         Pet pet = new Pet(
                 "TEST_NAME",
@@ -131,10 +112,11 @@ class PetSimTest {
 
         pet.progressTime(time);
 
-        assertEquals(minValue + changeAmount, pet.getHunger());
-        assertEquals(maxValue - changeAmount, pet.getHappiness());
-        assertEquals(maxValue - changeAmount, pet.getHygiene());
-        assertEquals(minValue + changeAmount, pet.getBladder());
-        assertEquals(maxValue - changeAmount, pet.getEnergy());
+        int expectedValue = maxValue - changeAmount;
+        assertEquals(expectedValue, pet.getHunger());
+        assertEquals(expectedValue, pet.getHappiness());
+        assertEquals(expectedValue, pet.getHygiene());
+        assertEquals(expectedValue, pet.getBladder());
+        assertEquals(expectedValue, pet.getEnergy());
     }
 }

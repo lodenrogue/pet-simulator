@@ -7,12 +7,13 @@ import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DecreasingAttributeTest {
+class AttributeTest {
 
     @Test
     public void should_returnCorrectStartingValue_when_creatingAttribute() {
         int maxValue = 100;
-        Attribute attribute = new DecreasingAttribute.Builder()
+        Attribute attribute = new Attribute.Builder()
+                .startingValue(maxValue)
                 .minValue(0)
                 .maxValue(maxValue)
                 .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
@@ -27,7 +28,8 @@ class DecreasingAttributeTest {
         int maxValue = 100;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
-        Attribute attribute = new DecreasingAttribute.Builder()
+        Attribute attribute = new Attribute.Builder()
+                .startingValue(maxValue)
                 .minValue(0)
                 .maxValue(maxValue)
                 .timeToDecrease(time)
@@ -45,7 +47,8 @@ class DecreasingAttributeTest {
         int maxValue = 100;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
-        Attribute attribute = new DecreasingAttribute.Builder()
+        Attribute attribute = new Attribute.Builder()
+                .startingValue(maxValue)
                 .minValue(0)
                 .maxValue(maxValue)
                 .timeToDecrease(time)
@@ -65,7 +68,8 @@ class DecreasingAttributeTest {
         int maxValue = 100;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
-        Attribute attribute = new DecreasingAttribute.Builder()
+        Attribute attribute = new Attribute.Builder()
+                .startingValue(maxValue)
                 .minValue(0)
                 .maxValue(maxValue)
                 .timeToDecrease(time)
@@ -85,7 +89,8 @@ class DecreasingAttributeTest {
         int minValue = 0;
         Duration time = Duration.of(1, ChronoUnit.SECONDS);
 
-        Attribute attribute = new DecreasingAttribute.Builder()
+        Attribute attribute = new Attribute.Builder()
+                .startingValue(100)
                 .minValue(minValue)
                 .maxValue(100)
                 .timeToDecrease(time)

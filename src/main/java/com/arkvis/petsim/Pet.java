@@ -60,4 +60,8 @@ public class Pet {
     public void feed(int feedAmount) {
         hunger.giveBoon(feedAmount);
     }
+
+    public void play(int playAmount) {
+        happiness.giveBoon(playAmount);
+    }
 }

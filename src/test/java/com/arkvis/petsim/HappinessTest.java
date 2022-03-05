@@ -7,12 +7,12 @@ import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class HungerTest {
+public class HappinessTest {
 
     @Test
-    void should_returnCorrectStartingHunger_when_creatingPet() {
+    void should_returnCorrectStartingHappiness_when_creatingPet() {
         int maxValue = 100;
-        Attribute hunger = new Attribute.Builder()
+        Attribute happiness = new Attribute.Builder()
                 .startingValue(maxValue)
                 .minValue(0)
                 .maxValue(maxValue)
@@ -22,39 +22,40 @@ class HungerTest {
 
         Pet pet = new Pet(
                 "TEST_NAME",
-                hunger,
                 new StubAttribute(),
+                happiness,
                 new StubAttribute(),
                 new StubAttribute(),
                 new StubAttribute());
 
-        assertEquals(maxValue, pet.getHunger());
+        assertEquals(maxValue, pet.getHappiness());
     }
 
     @Test
-    void should_increaseHungerStat_when_feedingPet() {
-        int startingHunger = 20;
-        int feedAmount = 5;
-        int reducedHunger = startingHunger + feedAmount;
+    void should_increaseHappiness_when_playingWithPet() {
+        int startingValue = 10;
+        int playAmount = 5;
+        int increasedHappiness = startingValue + playAmount;
 
-        Attribute hunger = new Attribute.Builder()
-                .startingValue(startingHunger)
+        Attribute happiness = new Attribute.Builder()
+                .startingValue(startingValue)
                 .minValue(0)
                 .maxValue(100)
-                .startingValue(startingHunger)
                 .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
                 .decreaseAmount(1)
                 .build();
 
         Pet pet = new Pet(
                 "TEST_NAME",
-                hunger,
                 new StubAttribute(),
+                happiness,
                 new StubAttribute(),
                 new StubAttribute(),
                 new StubAttribute());
 
-        pet.feed(feedAmount);
-        assertEquals(reducedHunger, pet.getHunger());
+        pet.play(playAmount);
+        assertEquals(increasedHappiness, pet.getHappiness());
     }
+
+
 }
