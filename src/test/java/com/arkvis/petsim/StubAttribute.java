@@ -18,6 +18,6 @@ public class StubAttribute extends Attribute {
     }
 
     @Override
-    void giveBoon(int amount) {
+    void increase(int amount) {
     }
 }

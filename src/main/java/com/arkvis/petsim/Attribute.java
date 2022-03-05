@@ -5,7 +5,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class Attribute {
-    private final int startingValue;
     private final int minValue;
     private final int maxValue;
     private final Duration timeToDecrease;
@@ -15,15 +14,14 @@ public class Attribute {
     private Duration timeSinceDecrease;
 
     Attribute(int startingValue, int minValue, int maxValue, Duration timeToDecrease, int decreaseAmount) {
-        if(startingValue < minValue) {
+        if (startingValue < minValue) {
             throw new IllegalArgumentException("Starting value cannot be less than min value");
         }
 
-        if(startingValue > maxValue) {
+        if (startingValue > maxValue) {
             throw new IllegalArgumentException("Starting value cannot be great than max value");
         }
 
-        this.startingValue = startingValue;
         this.minValue = minValue;
         this.maxValue = maxValue;
 
@@ -50,7 +48,7 @@ public class Attribute {
         }
     }
 
-    void giveBoon(int amount) {
+    void increase(int amount) {
         value = Math.min(maxValue, value + amount);
     }
 
