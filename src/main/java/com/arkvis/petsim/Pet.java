@@ -10,7 +10,13 @@ public class Pet {
     private final Attribute bladder;
     private final Attribute energy;
 
-    public Pet(String name, Attribute hunger, Attribute happiness, Attribute hygiene, Attribute bladder, Attribute energy) {
+    public Pet(String name,
+               Attribute hunger,
+               Attribute happiness,
+               Attribute hygiene,
+               Attribute bladder,
+               Attribute energy) {
+
         this.name = name;
         this.hunger = hunger;
         this.happiness = happiness;
@@ -49,5 +55,9 @@ public class Pet {
 
     public long getEnergy() {
         return energy.getValue();
+    }
+
+    public void feed(int feedAmount) {
+        hunger.giveBoon(feedAmount);
     }
 }

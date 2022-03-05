@@ -23,4 +23,9 @@ public class SimpleDecreasingAttribute extends Attribute {
     void progressTime(Duration time) {
         attribute.progressTime(time);
     }
+
+    @Override
+    void giveBoon(int amount) {
+        attribute.giveBoon(amount);
+    }
 }

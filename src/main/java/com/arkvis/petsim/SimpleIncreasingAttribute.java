@@ -7,6 +7,7 @@ public class SimpleIncreasingAttribute extends Attribute {
 
     public SimpleIncreasingAttribute(Duration timeToIncrease) {
         attribute = new IncreasingAttribute.Builder()
+                .startingValue(0)
                 .minValue(0)
                 .maxValue(100)
                 .timeToIncrease(timeToIncrease)
@@ -22,5 +23,10 @@ public class SimpleIncreasingAttribute extends Attribute {
     @Override
     void progressTime(Duration time) {
         attribute.progressTime(time);
+    }
+
+    @Override
+    void giveBoon(int amount) {
+        attribute.giveBoon(amount);
     }
 }

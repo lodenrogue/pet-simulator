@@ -11,6 +11,9 @@ public class StubAttribute extends Attribute {
 
     @Override
     void progressTime(Duration time) {
+    }
 
+    @Override
+    void giveBoon(int amount) {
     }
 }

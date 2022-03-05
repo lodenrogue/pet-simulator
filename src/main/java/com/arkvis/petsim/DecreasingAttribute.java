@@ -40,6 +40,11 @@ public class DecreasingAttribute extends Attribute {
         }
     }
 
+    @Override
+    void giveBoon(int amount) {
+
+    }
+
     private Duration getTotalIncrementTime(long numOfIncrements) {
         long totalIncrementInSeconds = timeToDecrease.getSeconds() * numOfIncrements;
         return Duration.of(totalIncrementInSeconds, ChronoUnit.SECONDS);

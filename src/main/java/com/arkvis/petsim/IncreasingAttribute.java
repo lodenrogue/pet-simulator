@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class IncreasingAttribute extends Attribute {
+    private final Integer minValue;
     private final Integer maxValue;
     private final Duration timeToIncrease;
     private final Integer increaseAmount;
@@ -12,13 +13,22 @@ public class IncreasingAttribute extends Attribute {
     private Duration timeSinceIncrease;
     private long value;
 
-    IncreasingAttribute(int minAmount, int maxAmount, Duration timeToIncrease, int increaseAmount) {
-        this.maxValue = maxAmount;
+    IncreasingAttribute(int startingValue, int minValue, int maxValue, Duration timeToIncrease, int increaseAmount) {
+        if (startingValue < minValue) {
+            throw new IllegalArgumentException("Starting value cannot be less tha min value");
+        }
+
+        if (startingValue > maxValue) {
+            throw new IllegalArgumentException("Starting value cannot be greater than max value");
+        }
+
+        this.minValue = minValue;
+        this.maxValue = maxValue;
         this.timeToIncrease = timeToIncrease;
         this.increaseAmount = increaseAmount;
 
         timeSinceIncrease = Duration.of(0, ChronoUnit.MINUTES);
-        this.value = minAmount;
+        this.value = startingValue;
     }
 
     @Override
@@ -39,6 +49,11 @@ public class IncreasingAttribute extends Attribute {
         }
     }
 
+    @Override
+    void giveBoon(int amount) {
+        value = Math.max(minValue, value - amount);
+    }
+
     private Duration getTotalIncrementTime(long numOfIncrements) {
         long totalIncrementInSeconds = timeToIncrease.getSeconds() * numOfIncrements;
         return Duration.of(totalIncrementInSeconds, ChronoUnit.SECONDS);
@@ -50,6 +65,7 @@ public class IncreasingAttribute extends Attribute {
     }
 
     public static class Builder {
+        private Integer startingValue;
         private Integer minValue;
         private Integer maxValue;
         private Duration timeToIncrease;
@@ -76,12 +92,18 @@ public class IncreasingAttribute extends Attribute {
             return this;
         }
 
+        public Builder startingValue(int startingValue) {
+            this.startingValue = startingValue;
+            return this;
+        }
+
         public Attribute build() {
+            if (Objects.isNull(startingValue)) throw new IllegalArgumentException("Staring value is required");
             if (Objects.isNull(minValue)) throw new IllegalArgumentException("Min value is required");
             if (Objects.isNull(maxValue)) throw new IllegalArgumentException("Max value is required");
             if (Objects.isNull(timeToIncrease)) throw new IllegalArgumentException("Time to increase is required");
             if (Objects.isNull(increaseAmount)) throw new IllegalArgumentException("Increase amount is required");
-            return new IncreasingAttribute(minValue, maxValue, timeToIncrease, increaseAmount);
+            return new IncreasingAttribute(startingValue, minValue, maxValue, timeToIncrease, increaseAmount);
         }
     }
 }

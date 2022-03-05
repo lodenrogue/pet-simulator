@@ -1,5 +1,6 @@
 package com.arkvis.petsim;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -10,9 +11,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class IncreasingAttributeTest {
 
     @Test
-    public void should_returnCorrectStartingValue_when_creatingAttribute() {
+    void should_throwException_when_startingValueIsLessThanMinValue() {
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new IncreasingAttribute.Builder()
+                        .startingValue(0)
+                        .minValue(10)
+                        .maxValue(100)
+                        .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
+                        .increaseAmount(1)
+                        .build());
+    }
+
+    @Test
+    void should_throwException_when_startingValueIsGreaterThanMaxValue() {
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new IncreasingAttribute.Builder()
+                        .startingValue(150)
+                        .minValue(0)
+                        .maxValue(100)
+                        .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
+                        .increaseAmount(1)
+                        .build());
+    }
+
+    @Test
+    void should_returnCorrectStartingValue_when_creatingAttribute() {
         int minValue = 0;
         Attribute attribute = new IncreasingAttribute.Builder()
+                .startingValue(minValue)
                 .minValue(minValue)
                 .maxValue(100)
                 .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
@@ -22,11 +50,12 @@ class IncreasingAttributeTest {
     }
 
     @Test
-    public void should_returnIncreasedValue_when_oneDurationHasPassed() {
+    void should_returnIncreasedValue_when_oneDurationHasPassed() {
         int increaseAmount = 1;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
         Attribute attribute = new IncreasingAttribute.Builder()
+                .startingValue(0)
                 .minValue(0)
                 .maxValue(100)
                 .timeToIncrease(time)
@@ -38,11 +67,12 @@ class IncreasingAttributeTest {
     }
 
     @Test
-    public void should_returnIncreasedValue_when_multipleTimeDurationsHavePassed() {
+    void should_returnIncreasedValue_when_multipleTimeDurationsHavePassed() {
         int increaseAmount = 1;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
         Attribute attribute = new IncreasingAttribute.Builder()
+                .startingValue(0)
                 .minValue(0)
                 .maxValue(100)
                 .timeToIncrease(time)
@@ -57,11 +87,12 @@ class IncreasingAttributeTest {
     }
 
     @Test
-    public void should_returnIncreasedValue_when_timeIsProgressedMultipleTimes() {
+    void should_returnIncreasedValue_when_timeIsProgressedMultipleTimes() {
         int increaseAmount = 1;
         Duration time = Duration.of(1, ChronoUnit.MINUTES);
 
         Attribute attribute = new IncreasingAttribute.Builder()
+                .startingValue(0)
                 .minValue(0)
                 .maxValue(100)
                 .timeToIncrease(time)
@@ -82,6 +113,7 @@ class IncreasingAttributeTest {
         Duration time = Duration.of(1, ChronoUnit.SECONDS);
 
         Attribute attribute = new IncreasingAttribute.Builder()
+                .startingValue(0)
                 .minValue(0)
                 .maxValue(maxValue)
                 .timeToIncrease(time)

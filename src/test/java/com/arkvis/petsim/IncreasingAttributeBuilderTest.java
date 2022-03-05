@@ -9,6 +9,18 @@ import java.time.temporal.ChronoUnit;
 class IncreasingAttributeBuilderTest {
 
     @Test
+    void should_throwException_when_buildingAttributeButMissingStartingValue() {
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new IncreasingAttribute.Builder()
+                        .minValue(0)
+                        .maxValue(100)
+                        .timeToIncrease(Duration.of(1, ChronoUnit.MINUTES))
+                        .increaseAmount(1)
+                        .build());
+    }
+
+    @Test
     void should_throwException_when_buildingAttributeButMissingMinValue() {
         Assertions.assertThrows(
                 IllegalArgumentException.class,
