@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class HappinessTest {
+class HappinessTest {
 
     @Test
     void should_returnCorrectStartingHappiness_when_creatingPet() {
@@ -32,7 +32,7 @@ public class HappinessTest {
     }
 
     @Test
-    void should_increaseHappiness_when_playingWithPet() {
+    void should_increaseHappinessStat_when_playingWithPet() {
         int startingValue = 10;
         int playAmount = 5;
         int increasedHappiness = startingValue + playAmount;
@@ -56,6 +56,4 @@ public class HappinessTest {
         pet.play(playAmount);
         assertEquals(increasedHappiness, pet.getHappiness());
     }
-
-
 }

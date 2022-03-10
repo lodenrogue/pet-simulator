@@ -24,28 +24,6 @@ class PetSimTest {
     }
 
     @Test
-    void should_returnCorrectStartingHygiene_when_creatingPet() {
-        int maxValue = 100;
-        Attribute hygiene = new Attribute.Builder()
-                .startingValue(maxValue)
-                .minValue(0)
-                .maxValue(maxValue)
-                .timeToDecrease(Duration.of(1, ChronoUnit.MINUTES))
-                .decreaseAmount(1)
-                .build();
-
-        Pet pet = new Pet(
-                "TEST_NAME",
-                new StubAttribute(),
-                new StubAttribute(),
-                hygiene,
-                new StubAttribute(),
-                new StubAttribute());
-
-        assertEquals(maxValue, pet.getHygiene());
-    }
-
-    @Test
     void should_returnCorrectStartingBladder_when_creatingPet() {
         int minValue = 0;
         Attribute bladder = new Attribute.Builder()
